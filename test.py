@@ -52,17 +52,19 @@ def select_and_print(role: Role, open: int) -> None:
 projects: List[Project] = []
 
 julius_caesar = Person("Julius", "Caesar")
-julius_caesar.update_acquired_skill(Skill(Skills.Leadership.name, 8))
+julius_caesar.update_acquired_skill(Skill(Skills.Leadership.name, 6))
 julius_caesar.update_acquired_skill(Skill(Skills.Martial.name, 6))
-julius_caesar.update_acquired_skill(Skill(Skills.Charisma.name, 9))
+julius_caesar.update_acquired_skill(Skill(Skills.Charisma.name, 7))
 
 julius_caesar.update_desired_skill(Skill(Skills.Administration.name, 5))
 julius_caesar.update_desired_skill(Skill(Skills.Financial.name, 5))
+julius_caesar.update_desired_skill(Skill(Skills.Martial.name, 8))
+
 
 markus_crassus = Person("Markus", "Crassus")
 markus_crassus.update_acquired_skill(Skill(Skills.Leadership.name, 6))
 markus_crassus.update_acquired_skill(Skill(Skills.Financial.name, 8))
-markus_crassus.update_acquired_skill(Skill(Skills.Administration.name, 7))
+markus_crassus.update_acquired_skill(Skill(Skills.Administration.name, 8))
 
 markus_crassus.update_desired_skill(Skill(Skills.Martial.name, 6))
 markus_crassus.update_desired_skill(Skill(Skills.Charisma.name, 6))
@@ -92,6 +94,8 @@ consul = Role(Roles.Consul.name,
               "Serve as one of two Consuls of Rome.", RoleStatus.Open)
 consul.update_required_skill(Skill(Skills.Leadership.name, 6))
 consul.update_required_skill(Skill(Skills.Administration.name, 6))
+consul.update_required_skill(Skill(Skills.Financial.name, 6))
+
 
 consul.update_bonus_skill(Skill(Skills.Financial.name, 8))
 consul.update_bonus_skill(Skill(Skills.Charisma.name, 6))
@@ -141,16 +145,16 @@ select_and_print(consul, 2)
 select_and_print(command, 1)
 
 pompey_magnus.endorse(Endorsement("Skilled Administrator",
-                                  Skill(Skills.Administration.name, 8)))
+                                  Skill(Skills.Administration.name, 8)), marcus_cicero)
 markus_crassus.endorse(Endorsement("Skilled Administrator",
-                                   Skill(Skills.Administration.name, 8)))
+                                   Skill(Skills.Administration.name, 8)), marcus_cicero)
 
 julius_caesar.endorse(Endorsement(
-    "Exceptional military commander", Skill(Skills.Martial.name, 10)))
+    "Exceptional military commander", Skill(Skills.Martial.name, 10)), marc_antony)
 julius_caesar.endorse(Endorsement(
-    "Would follow anywhere.", Skill(Skills.Leadership.name, 10)))
+    "Would follow anywhere.", Skill(Skills.Leadership.name, 10)), marcus_cicero)
 julius_caesar.endorse(Endorsement(
-    "Love this guy.", Skill(Skills.Charisma.name, 10)))
+    "Love this guy.", Skill(Skills.Charisma.name, 10)), marc_antony)
 
 dictator = Role(Roles.Dictator.name, "Rule Rome.", RoleStatus.Open)
 dictator.update_required_skill(Skill(Skills.Martial.name, 6))

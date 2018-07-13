@@ -14,12 +14,12 @@ class RoleStatus(Enum):
 def calc_score(skills: Dict[str, Skill], endorsements: Dict[str, List[Endorsement]], required: Dict[str, Skill]):
     score = 0
     for name, skill in skills.items():
-        if name in required and skill.meets(required[name]):
-            score += skill.experience_level
+        if name in required:
+            score += skill.experience_rating
     for name, endorsement_list in endorsements.items():
         if name in required:
             for endorsement in endorsement_list:
-                score += endorsement.skill.experience_level
+                score += endorsement.skill.experience_rating
     return score
 
 
@@ -55,21 +55,13 @@ class Role():
     def apply(self, person: Person) -> None:
         self.applicants.add(person)
 
-    def meets_requirements(self, person: Person) -> bool:
-        count = 0
-        for name, skill in person.acquired_skills.items():
-            if name in self.required_skills and skill.meets(self.required_skills[name]):
-                count += 1
-        return count == len(self.required_skills)
-
     def match_score(self, person: Person) -> int:
         score = 0
-        if self.meets_requirements(person):
-            score += calc_score(person.acquired_skills,
-                                person.endorsements,  self.required_skills)
-            score += calc_score(person.acquired_skills,
-                                person.endorsements, self.bonus_skills)
-            score += calc_score(person.desired_skills, {}, self.develop_skills)
+        score += calc_score(person.acquired_skills,
+                            person.received_endorsements,  self.required_skills)
+        score += calc_score(person.acquired_skills,
+                            person.received_endorsements, self.bonus_skills)
+        score += calc_score(person.desired_skills, {}, self.develop_skills)
         return score
 
     def get_top_applicants(self) -> List[Tuple[int, Person]]:

@@ -9,7 +9,8 @@ class Person():
         self.last_name: str = last_name
         self.acquired_skills: Dict[str, Skill] = {}
         self.desired_skills: Dict[str, Skill] = {}
-        self.endorsements: Dict[str, List[Endorsement]] = {}
+        self.received_endorsements: Dict[str, List[Endorsement]] = {}
+        self.given_endorsements: Dict[str, List[Endorsement]] = {}
 
     def update_acquired_skill(self, skill: Skill) -> None:
         self.acquired_skills[skill.name] = skill
@@ -17,8 +18,10 @@ class Person():
     def update_desired_skill(self, skill: Skill) -> None:
         self.desired_skills[skill.name] = skill
 
-    def endorse(self, endorsement: Endorsement):
-        self.endorsements.setdefault(
+    def endorse(self, endorsement: Endorsement, endorser) -> None:
+        self.received_endorsements.setdefault(
+            endorsement.skill.name, []).append(endorsement)
+        endorser.given_endorsements.setdefault(
             endorsement.skill.name, []).append(endorsement)
 
     def __str__(self):

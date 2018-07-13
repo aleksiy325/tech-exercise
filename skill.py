@@ -1,7 +1,7 @@
 class Skill():
-    def __init__(self, name: str, experience_level: int) -> None:
+    def __init__(self, name: str, experience_rating: int) -> None:
         self.name: str = name
-        self.experience_level: int = experience_level
+        self.experience_rating: int = experience_rating
 
     def meets(self, other):
-        return self.name == other.name and self.experience_level >= other.experience_level
+        return self.name == other.name and self.experience_rating >= other.experience_rating
