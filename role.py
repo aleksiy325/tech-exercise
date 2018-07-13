@@ -1,7 +1,8 @@
-from typing import Dict, Set
+from typing import Dict, Set, List, Tuple
 from enum import Enum
 from skill import Skill
 from person import Person
+from endorsement import Endorsement
 
 
 class RoleStatus(Enum):
@@ -10,11 +11,15 @@ class RoleStatus(Enum):
     Need = 2
 
 
-def count_matches(skills: Dict[str, Skill], required: Dict[str, Skill]) -> int:
+def calc_score(skills: Dict[str, Skill], endorsements: Dict[str, List[Endorsement]], required: Dict[str, Skill]):
     score = 0
     for name, skill in skills.items():
         if name in required and skill.meets(required[name]):
-            score += 1
+            score += skill.experience_level
+    for name, endorsement_list in endorsements.items():
+        if name in required:
+            for endorsement in endorsement_list:
+                score += endorsement.skill.experience_level
     return score
 
 
@@ -38,27 +43,42 @@ class Role():
     def update_develop_skill(self, skill: Skill) -> None:
         self.develop_skills[skill.name] = skill
 
-    def appoint(self, person: Person) -> None:
+    def accept(self, person: Person) -> None:
         self.appointed.add(person)
+        if person in self.applicants:
+            self.applicants.remove(person)
+
+    def deny(self, person: Person) -> None:
+        if person in self.applicants:
+            self.applicants.remove(person)
 
     def apply(self, person: Person) -> None:
         self.applicants.add(person)
 
+    def meets_requirements(self, person: Person) -> bool:
+        count = 0
+        for name, skill in person.acquired_skills.items():
+            if name in self.required_skills and skill.meets(self.required_skills[name]):
+                count += 1
+        return count == len(self.required_skills)
+
     def match_score(self, person: Person) -> int:
         score = 0
-        score += count_matches(person.acquired_skills, self.required_skills)
-        if score != len(self.required_skills):
-            return 0
-        score += count_matches(person.acquired_skills, self.bonus_skills)
-        score += count_matches(person.desired_skills, self.develop_skills)
+        if self.meets_requirements(person):
+            score += calc_score(person.acquired_skills,
+                                person.endorsements,  self.required_skills)
+            score += calc_score(person.acquired_skills,
+                                person.endorsements, self.bonus_skills)
+            score += calc_score(person.desired_skills, {}, self.develop_skills)
         return score
 
-    # def get_top_applicants(self) -> List[Tuple[int, Person]]:
-    #     applicants: List[Tuple[int, Person]] = []
-    #     for person in self.applicants
-
-    #     return applicants
+    def get_top_applicants(self) -> List[Tuple[int, Person]]:
+        top: List[Tuple[int, Person]] = []
+        for person in self.applicants:
+            top.append((self.match_score(person), person))
+        top = sorted(top, key=lambda x: x[0], reverse=True)
+        return top
 
     def __str__(self):
-        s = '<{}: {}> '.format(self.name, self.description)
+        s = '{}: {} '.format(self.name, self.description)
         return s
