@@ -27,3 +27,13 @@ class Person():
     def __str__(self):
         s = '{} {}'.format(self.first_name, self.last_name)
         return s
+
+    def print_profile(self):
+        print('{} {}'.format(self.first_name, self.last_name))
+        print('Acquired Skills: ' + ', '.join([str(skill)
+                                               for skill in self.acquired_skills.values()]))
+        print('Desired Skills: ' + ', '.join([str(skill)
+                                              for skill in self.desired_skills.values()]))
+        print('Endorsements: ' + ', '.join([str(endorsement)
+                                            for endorsements in self.received_endorsements.values() for endorsement in endorsements]))
+        print('\n')

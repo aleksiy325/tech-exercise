@@ -74,3 +74,14 @@ class Role():
     def __str__(self):
         s = '{}: {} '.format(self.name, self.description)
         return s
+
+    def print_role(self):
+        print(self.name)
+        print(self.description)
+        print('Required Skills: ' + ', '.join([str(skill)
+                                               for skill in self.required_skills.values()]))
+        print('Bonus Skills: ' + ', '.join([str(skill)
+                                            for skill in self.bonus_skills.values()]))
+        print('Will Develop Skills: ' + ', '.join([str(skill)
+                                                   for skill in self.develop_skills.values()]))
+        print('\n')

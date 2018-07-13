@@ -35,6 +35,7 @@ def print_top_roles(person: Person, projects: List[Project]) -> None:
     print('Top Roles for {}'.format(person))
     for score, role in get_top_roles(person, projects):
         print(score, role)
+    print('\n')
 
 
 def select_and_print(role: Role, open: int) -> None:
@@ -48,6 +49,8 @@ def select_and_print(role: Role, open: int) -> None:
             role.deny(person)
         print("{} {} {} for {}".format(decision, score, person, role))
 
+    print('\n')
+
 
 projects: List[Project] = []
 
@@ -59,7 +62,7 @@ julius_caesar.update_acquired_skill(Skill(Skills.Charisma.name, 7))
 julius_caesar.update_desired_skill(Skill(Skills.Administration.name, 5))
 julius_caesar.update_desired_skill(Skill(Skills.Financial.name, 5))
 julius_caesar.update_desired_skill(Skill(Skills.Martial.name, 8))
-
+julius_caesar.print_profile()
 
 markus_crassus = Person("Markus", "Crassus")
 markus_crassus.update_acquired_skill(Skill(Skills.Leadership.name, 6))
@@ -69,7 +72,7 @@ markus_crassus.update_acquired_skill(Skill(Skills.Administration.name, 8))
 markus_crassus.update_desired_skill(Skill(Skills.Martial.name, 6))
 markus_crassus.update_desired_skill(Skill(Skills.Charisma.name, 6))
 markus_crassus.update_desired_skill(Skill(Skills.Oratory.name, 6))
-
+markus_crassus.print_profile()
 
 pompey_magnus = Person("Pompey", "Magnus")
 pompey_magnus.update_acquired_skill(Skill(Skills.Leadership.name, 8))
@@ -79,11 +82,12 @@ pompey_magnus.update_acquired_skill(Skill(Skills.Administration.name, 8))
 
 pompey_magnus.update_desired_skill(Skill(Skills.Leadership.name, 10))
 pompey_magnus.update_desired_skill(Skill(Skills.Administration.name, 10))
-
+pompey_magnus.print_profile()
 
 marcus_cicero = Person("Markus", "Cicero")
 marcus_cicero.update_acquired_skill(Skill(Skills.Leadership.name, 3))
 marcus_cicero.update_acquired_skill(Skill(Skills.Oratory.name, 9))
+marcus_cicero.print_profile()
 
 govern_rome = Project(
     "Govern Rome", "Project to govern the city.",
@@ -105,6 +109,7 @@ consul.update_bonus_skill(Skill(Skills.Martial.name, 5))
 consul.update_develop_skill(Skill(Skills.Financial.name, 0))
 consul.update_develop_skill(Skill(Skills.Leadership.name, 0))
 consul.update_develop_skill(Skill(Skills.Administration.name, 0))
+consul.print_role()
 govern_rome.add_role(consul)
 
 projects.append(govern_rome)
@@ -126,6 +131,7 @@ command.update_bonus_skill(Skill(Skills.Leadership.name, 4))
 command.update_bonus_skill(Skill(Skills.Martial.name, 6))
 command.update_develop_skill(Skill(Skills.Martial.name, 0))
 command.update_develop_skill(Skill(Skills.Leadership.name, 0))
+command.print_role()
 
 gaul_campaign.add_role(command)
 projects.append(gaul_campaign)
@@ -156,11 +162,19 @@ julius_caesar.endorse(Endorsement(
 julius_caesar.endorse(Endorsement(
     "Love this guy.", Skill(Skills.Charisma.name, 10)), marc_antony)
 
+
+julius_caesar.print_profile()
+markus_crassus.print_profile()
+pompey_magnus.print_profile()
+
+
 dictator = Role(Roles.Dictator.name, "Rule Rome.", RoleStatus.Open)
 dictator.update_required_skill(Skill(Skills.Martial.name, 6))
 dictator.update_required_skill(Skill(Skills.Leadership.name, 8))
 
 dictator.update_bonus_skill(Skill(Skills.Charisma.name, 8))
+
+dictator.print_role()
 
 dictator.apply(pompey_magnus)
 dictator.apply(marc_antony)
